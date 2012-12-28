@@ -82,7 +82,8 @@ end
 function draw_board()
 	for j=1,GRID_HEIGHT do
 		for i=1,GRID_WIDTH do
-			lg.drawq(pipe_sprites, tileQuad, i*DIM, j*DIM, 0, SCALE, SCALE, 0, 0)
+			--lg.drawq(pipe_sprites, tileQuad, i*DIM, j*DIM, 0, SCALE, SCALE, 0, 0)
+			lg.rectangle("line", i*DIM, j*DIM, DIM, DIM)
 			if board_data[j][i] ~= 0 then
 				board_data[j][i]:draw()
 			end
