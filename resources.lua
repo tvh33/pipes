@@ -2,7 +2,7 @@ pipe_sprites = love.graphics.newImage("res/sprites.png")
 pipe_sprites:setFilter("nearest", "nearest")
 
 pipe_quads = {}
-for j=1,4 do
+for j=1,5 do
 	pipe_quads[j] = {}
 	for i=1,4 do
 		pipe_quads[j][i] = love.graphics.newQuad((i-1)*BASE_DIM, (j-1)*BASE_DIM, BASE_DIM, BASE_DIM, 512, 512)
@@ -18,7 +18,7 @@ for j=1,5 do
 	end
 end
 
-tileQuad = love.graphics.newQuad(0, 4*BASE_DIM, BASE_DIM, BASE_DIM, 512, 512)
+tileQuad = love.graphics.newQuad(0, 5*BASE_DIM, BASE_DIM, BASE_DIM, 512, 512)
 
 wheelQuads = {}
 for i=1,8 do
@@ -33,8 +33,9 @@ y_base[1] = 0
 y_base[2] = 3*BASE_DIM
 y_base[3] = 6*BASE_DIM
 y_base[4] = 13*BASE_DIM
-local js = {3,3,7,1}
-for n=1,4 do
+y_base[5] = 14*BASE_DIM
+local js = {3,3,7,1,1}
+for n=1,5 do
 	testSprites[n] = {}
 	for j=1,js[n] do
 		testSprites[n][j] = {}

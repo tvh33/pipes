@@ -38,6 +38,9 @@ function Pipe.create( _x, _y, _type )
 	elseif _type == PIPE_START then
 		self.entries[1] = Point.create(_x, _y+1)
 		self.entries[2] = Point.create(_x, _y-1)
+	elseif _type == PIPE_END then
+		self.noe = 1
+		self.entries[1] = Point.create(_x, _y-1)
 	end
 	
 	-- initialize exit vector

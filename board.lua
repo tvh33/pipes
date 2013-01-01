@@ -17,6 +17,7 @@ end
 
 function init_board( )
 	board_data[4][3] = StartPipe.create(3,4,0)
+	board_data[3][7] = EndPipe.create(7,3,0)
 end
 
 -- updates the board

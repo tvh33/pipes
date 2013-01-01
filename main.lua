@@ -7,6 +7,7 @@ require "crosspipe"
 require "tools"
 require "board"
 require "startpipe"
+require "endpipe"
 
 
 function love.load( )
@@ -49,5 +50,11 @@ function love.keypressed( _key )
 		startBoard()
 	elseif _key == "escape" then
 		os.exit()
+	elseif _key == "+" then
+		WATER_SPEED = WATER_SPEED + 1
+	elseif _key == "-" then
+		if WATER_SPEED > 1 then
+			WATER_SPEED = WATER_SPEED - 1
+		end
 	end
 end

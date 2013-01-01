@@ -22,8 +22,8 @@ function StartPipe.create( _x, _y, _rot )
 	return self
 end
 
-function StartPipe:update(_frame, _dt)
-	self.line:update(_frame, _dt)
+function StartPipe:update(_frame)
+	self.line:update(_frame)
 end
 
 function StartPipe:updateReal( _dt )
