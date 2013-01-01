@@ -24,17 +24,20 @@ function Pipe.create( _x, _y, _type )
 	-- initialize neighbor points for given type of pipe
 	self.entries = {}
 	self.noe = 2
-	if _type == 1 then
+	if _type == PIPE_CORNER then
 		self.entries[1] = Point.create(_x-1, _y)
 		self.entries[2] = Point.create(_x, _y-1)
-	elseif _type == 2 then
+	elseif _type == PIPE_LINE then
 		self.entries[1] = Point.create(_x, _y+1)
 		self.entries[2] = Point.create(_x, _y-1)
-	elseif _type == 3 then
+	elseif _type == PIPE_JUNCTION then
 		self.noe = 3
 		self.entries[1] = Point.create(_x-1, _y)
 		self.entries[2] = Point.create(_x+1, _y)
 		self.entries[3] = Point.create(_x, _y-1)
+	elseif _type == PIPE_START then
+		self.entries[1] = Point.create(_x, _y+1)
+		self.entries[2] = Point.create(_x, _y-1)
 	end
 	
 	-- initialize exit vector

@@ -6,10 +6,11 @@ require "pipe"
 require "crosspipe"
 require "tools"
 require "board"
+require "startpipe"
 
 
 function love.load( )
-	love.graphics.setBackgroundColor(68,61,51)
+	love.graphics.setBackgroundColor(23,16,7)
 	init_board()
 	sfx = {}
 end
@@ -26,6 +27,7 @@ function love.update( dt )
 end
 
 function love.draw( )
+	drawBoardBase()
 	for	i,v in ipairs(sfx) do
 		if v.active then
 			v:draw()

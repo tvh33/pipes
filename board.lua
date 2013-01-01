@@ -16,13 +16,14 @@ for j=1,GRID_HEIGHT do
 end
 
 function init_board( )
-	board_data[6][3] = Pipe.create(3,6,PIPE_CORNER)
+	board_data[6][3] = StartPipe.create(3,6,0)
 end
 
 -- updates the board
 -- iterates through board matrix and calls update routine on
 -- individual pipe instances
 function update_board( dt )
+	board_data[6][3]:updateReal(dt)
 	if stateting > 0 then
 		clock = clock + WATER_SPEED*dt
 		if clock >= 1 then
@@ -43,7 +44,7 @@ end
 
 function startBoard( )
 	stateting = 1
-	board_data[6][3]:enterAction(1, 0)
+	board_data[6][3]:enterAction()
 end
 
 function getBoardValue(_p)
@@ -82,11 +83,17 @@ end
 function draw_board()
 	for j=1,GRID_HEIGHT do
 		for i=1,GRID_WIDTH do
-			--lg.drawq(pipe_sprites, tileQuad, i*DIM, j*DIM, 0, SCALE, SCALE, 0, 0)
-			lg.rectangle("line", i*DIM, j*DIM, DIM, DIM)
 			if board_data[j][i] ~= 0 then
 				board_data[j][i]:draw()
 			end
+		end
+	end
+end
+
+function drawBoardBase( )
+	for j=1,GRID_HEIGHT do
+		for i=1,GRID_WIDTH do
+			lg.drawq(pipe_sprites, tileQuad, i*DIM, j*DIM, 0, SCALE, SCALE, 0, 0)
 		end
 	end
 end
