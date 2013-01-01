@@ -31,6 +31,7 @@ function StartPipe:updateReal( _dt )
 		if self.wheelAngle <= 405 then
 			self.wheelAngle = self.wheelAngle + 315*_dt
 		else
+			self.line:enterAction(1, 0)
 			self.wheelAngle = 45
 			self.state = 2
 		end
@@ -39,7 +40,6 @@ end
 
 function StartPipe:enterAction()
 	if self.state == 0 then
-		self.line:enterAction(1, 0)
 		self.state = 1
 	end
 end

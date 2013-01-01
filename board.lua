@@ -16,14 +16,14 @@ for j=1,GRID_HEIGHT do
 end
 
 function init_board( )
-	board_data[6][3] = StartPipe.create(3,6,0)
+	board_data[4][3] = StartPipe.create(3,4,0)
 end
 
 -- updates the board
 -- iterates through board matrix and calls update routine on
 -- individual pipe instances
 function update_board( dt )
-	board_data[6][3]:updateReal(dt)
+	board_data[4][3]:updateReal(dt)
 	if stateting > 0 then
 		clock = clock + WATER_SPEED*dt
 		if clock >= 1 then
@@ -44,7 +44,7 @@ end
 
 function startBoard( )
 	stateting = 1
-	board_data[6][3]:enterAction()
+	board_data[4][3]:enterAction()
 end
 
 function getBoardValue(_p)
