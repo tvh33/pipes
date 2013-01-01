@@ -113,10 +113,10 @@ end
 function Pipe:draw( )
 	lg.drawq(pipe_sprites, pipe_quads[self.type][self.rotation], self.x, self.y, 0, SCALE, SCALE, 0, 0)
 	if self.state == STATE_FILL then
-		lg.drawq(pipe_sprites, testSprites[self.type][self.enter][(self.step%7)], self.x+DIM_HALF, self.y+DIM_HALF, 
+		lg.drawq(pipe_sprites, water_quads[self.type][self.enter][(self.step%7)], self.x+DIM_HALF, self.y+DIM_HALF, 
 			math.rad(self.angle), SCALE, SCALE, 12, 12)
 	elseif self.state == STATE_FULL then
-		lg.drawq(pipe_sprites, testSprites[self.type][1][6], self.x+DIM_HALF, self.y+DIM_HALF, math.rad(self.angle), SCALE, SCALE, 12, 12)
+		lg.drawq(pipe_sprites, water_quads[self.type][1][6], self.x+DIM_HALF, self.y+DIM_HALF, math.rad(self.angle), SCALE, SCALE, 12, 12)
 	end
 end
 
