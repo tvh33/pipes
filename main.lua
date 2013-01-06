@@ -8,12 +8,17 @@ require "tools"
 require "board"
 require "startpipe"
 require "endpipe"
+require "buffet"
 
 
 function love.load( )
+	math.randomseed( os.time() )
+	math.random(); math.random(); math.random()
 	love.graphics.setBackgroundColor(23,16,7)
 	init_board()
 	sfx = {}
+	Buffet.setPosition(DIM, (GRID_HEIGHT+1)*DIM+DIM_HALF)
+	Buffet.reset()
 end
 
 function love.update( dt )
@@ -37,12 +42,16 @@ function love.draw( )
 		end
 	end
 	draw_board()
-	toolboxDraw()
+	Buffet.draw()
 end
 
 function love.mousepressed( _x, _y, _button )
+	Buffet.mousePressed(_x,_y,_button)
+end
+
+function love.mousereleased( _x, _y, _button )
 	boardClick(_x, _y, _button)
-	toolboxClick(_x, _y, _button)
+	Buffet.mouseReleased(_x, _y, _button)
 end
 
 function love.keypressed( _key )
@@ -56,5 +65,8 @@ function love.keypressed( _key )
 		if WATER_SPEED > 1 then
 			WATER_SPEED = WATER_SPEED - 1
 		end
+	elseif _key == "r" then
+		reset_board()
+		Buffet.reset()
 	end
 end

@@ -14,9 +14,12 @@ function StartPipe.create( _x, _y, _rot )
 	self.y = _y*DIM
 	self.line = Pipe.create(_x,_y,PIPE_START)
 	self.wheelAngle = 0
+	self.wheelOffPoint = Point.create(0,(SCALE*4))
 
 	if _rot > 0 then
+		local center = Point.create(0,0)
 		self.line:rotate(_rot)
+		self.wheelOffPoint:rotate(center, _rot)
 	end
 
 	return self
@@ -57,11 +60,12 @@ end
 function StartPipe:draw( )
 	self.line:draw()
 	local a = math.floor(((self.wheelAngle%360)/45)+1)
-	lg.drawq(pipe_sprites, wheelQuads[a], self.x+DIM_HALF, self.y+DIM_HALF+(SCALE*4), math.rad(self.wheelAngle), SCALE, SCALE, 12, 12)
+	lg.drawq(pipe_sprites, wheelQuads[a], self.x+DIM_HALF+self.wheelOffPoint.x, self.y+DIM_HALF+self.wheelOffPoint.y, math.rad(self.wheelAngle), SCALE, SCALE, 12, 12)
 end
 
 -- rotates the StartPipe instance
 -- calls update routine on both its LinePipe instances
 function StartPipe:rotate(_times)
 	self.line:rotate(_times)
+	self.wheelOffPoint:rotateCenter(_times)
 end

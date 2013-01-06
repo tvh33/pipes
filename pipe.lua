@@ -99,7 +99,6 @@ end
 function Pipe:probe( _p, _frame )
 	for n=1,self.noe do
 		-- compare own entry points with point being probed from
-		--print("Comparing prober ".._p.x..",".._p.y.." with entry "..self.entries[n].x..","..self.entries[n].y)
 		if Point.compare(self.entries[n], _p) then
 			-- if points are equal then enter this point from the n'th entry
 			self:enterAction(n, _frame)

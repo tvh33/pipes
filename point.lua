@@ -36,7 +36,6 @@ function Point:rotate( _p, _n)
 	self.y = _p.y - sin*dx + cos*dy
 end
 
-
 -- Tests whether or not the point instance is in the board grid
 -- Returns true if inside grid, false otherwise
 function Point:checkBounds( )

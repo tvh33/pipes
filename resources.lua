@@ -3,7 +3,7 @@ pipe_sprites:setFilter("nearest", "nearest")
 
 -- pipe sprites
 pipe_quads = {}
-for j=1,5 do
+for j=1,6 do
 	pipe_quads[j] = {}
 	for i=1,4 do
 		pipe_quads[j][i] = love.graphics.newQuad((i-1)*BASE_DIM, (j-1)*BASE_DIM, BASE_DIM, BASE_DIM, 512, 512)
@@ -11,7 +11,7 @@ for j=1,5 do
 end
 
 -- tile sprite
-tileQuad = love.graphics.newQuad(0, 5*BASE_DIM, BASE_DIM, BASE_DIM, 512, 512)
+tileQuad = love.graphics.newQuad(0, 6*BASE_DIM, BASE_DIM, BASE_DIM, 512, 512)
 
 -- wheel animation sprites
 wheelQuads = {}
