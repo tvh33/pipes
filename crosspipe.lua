@@ -34,7 +34,7 @@ end
 function CrossPipe:getState()
 	local s1 = self.line1:getState()
 	local s2 = self.line2:getState()
-	if s1 == STATE_FILL or s2 == STATE_FILL or (s1 == STATE_FULL or state ==STATE_FULL) then
+	if s1 == STATE_FILL or s2 == STATE_FILL then
 		return STATE_FILL
 	elseif s1 == STATE_FULL and s2 == STATE_FULL then
 		return STATE_FULL

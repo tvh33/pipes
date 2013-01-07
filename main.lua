@@ -19,6 +19,7 @@ function love.load( )
 	sfx = {}
 	Buffet.setPosition(DIM, (GRID_HEIGHT+1)*DIM+DIM_HALF)
 	Buffet.reset()
+	Score.init()
 end
 
 function love.update( dt )

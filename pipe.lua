@@ -67,7 +67,6 @@ function Pipe:enterAction( _n, _frame)
 	if self.state == STATE_EMPTY or _frame == self.activated then
 		self.state = STATE_FILL
 		self.activated = _frame
-		--self.enter[_n] = 1
 		self.enter = self.enter + 2^(_n-1)
 		self.exit[_n] = 0
 	end
