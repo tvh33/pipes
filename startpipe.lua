@@ -6,13 +6,13 @@ StartPipe.__index = StartPipe
 
 -- creates a new instance of StartPipe
 -- container for two orthogonal LinePipe instances
-function StartPipe.create( _x, _y, _rot )
+function StartPipe.create( _x, _y, _rot, _score )
 	local self = setmetatable({}, StartPipe)
 
 	self.state = 0
 	self.x = _x*DIM
 	self.y = _y*DIM
-	self.line = Pipe.create(_x,_y,PIPE_START)
+	self.line = Pipe.create(_x,_y,PIPE_START,_score)
 	self.wheelAngle = 0
 	self.wheelOffPoint = Point.create(0,(SCALE*4))
 

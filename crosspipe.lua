@@ -9,8 +9,8 @@ CrossPipe.__index = CrossPipe
 function CrossPipe.create( _x, _y, _type, _rot )
 	local self = setmetatable({}, CrossPipe)
 
-	self.line1 = Pipe.create(_x,_y,_type)
-	self.line2 = Pipe.create(_x,_y,_type)
+	self.line1 = Pipe.create(_x,_y,_type,100)
+	self.line2 = Pipe.create(_x,_y,_type,100)
 	self.line2:rotate(_rot)
 
 	return self
@@ -19,6 +19,11 @@ end
 function CrossPipe:update(_frame)
 	self.line1:update(_frame)
 	self.line2:update(_frame)
+	if self.line1.state == STATE_FULL then
+		self.line2:setScore(1000)
+	elseif self.line2.state == STATE_FULL then
+		self.line1:setScore(1000)
+	end
 end
 
 function CrossPipe:enterAction(_n, _frame)
@@ -29,7 +34,9 @@ end
 function CrossPipe:getState()
 	local s1 = self.line1:getState()
 	local s2 = self.line2:getState()
-	if s1 == STATE_FILL or s2 == STATE_FILL then
+	if s1 == STATE_FILL or s2 == STATE_FILL or (s1 == STATE_FULL or state ==STATE_FULL) then
+		return STATE_FILL
+	elseif (s1 == STATE_FULL and s2 ~= STATE_FULL) or (s1 ~= STATE_FULL and s2 == STATE_FULL) then
 		return STATE_FILL
 	elseif s1 == STATE_FULL and s2 == STATE_FULL then
 		return STATE_FULL

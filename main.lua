@@ -4,11 +4,11 @@ require "effects"
 require "point"
 require "pipe"
 require "crosspipe"
-require "tools"
 require "board"
 require "startpipe"
 require "endpipe"
 require "buffet"
+require "scoreSystem"
 
 
 function love.load( )
@@ -23,6 +23,7 @@ end
 
 function love.update( dt )
 	update_board(dt)
+	Score.update(dt)
 	for	i,v in ipairs(sfx) do
 		if v.active then
 			v:update(dt)
@@ -43,6 +44,7 @@ function love.draw( )
 	end
 	draw_board()
 	Buffet.draw()
+	Score.draw()
 end
 
 function love.mousepressed( _x, _y, _button )

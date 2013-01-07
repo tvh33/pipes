@@ -5,4 +5,5 @@ function love.conf(t)
 	t.screen.height = 700
 	t.screen.vsync = true
 	t.screen.fullscreen = false
+	t.console = true
 end

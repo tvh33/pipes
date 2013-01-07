@@ -8,14 +8,13 @@ local HEIGHT = DIM
 
 Buffet = {
 	x = 0,
-	y = 0
+	y = 0,
+	pending = 0,
+	pipes = {},
+	rotations = {},
+	states = {},
+	pipeX = {}
 }
-
-Buffet.pipes = {}
-Buffet.rotations = {}
-Buffet.states = {}
-Buffet.pipeX = {}
-Buffet.pending = 0
 
 local pendingXoff = 0
 local pendingYoff = 0
@@ -28,15 +27,10 @@ function Buffet.reset( )
 end
 
 function Buffet.new( _index )
-	local pipe = _index
+	local pipe = PIPE_CROSSLINE
 	local rot = math.random(1,4)
-
-	-- three first slots has fixed pipe types
-	if _index > 3 then
-		pipe = math.random(1,4)
-		if pipe == 4 then
-			pipe = 6
-		end
+	if math.random() > 0.10 then
+		pipe = math.random(1,3)
 	end
 
 	-- update pipe information for this slot

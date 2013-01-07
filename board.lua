@@ -35,7 +35,7 @@ function reset_board( )
 		local rot = math.random(0,3)
 		local xCoord = math.random(2,GRID_WIDTH-1)
 		local yCoord = math.random(2,GRID_HEIGHT-1)
-		board_data[yCoord][xCoord] = StartPipe.create(xCoord, yCoord, rot)
+		board_data[yCoord][xCoord] = StartPipe.create(xCoord, yCoord, rot, 0)
 		startPipes[i] = board_data[yCoord][xCoord]
 	end
 	-- Insert random end pipe(s)
@@ -43,7 +43,7 @@ function reset_board( )
 		local rot = math.random(0,3)
 		local xCoord = math.random(2,GRID_WIDTH-1)
 		local yCoord = math.random(2,GRID_HEIGHT-1)
-		board_data[yCoord][xCoord] = EndPipe.create(xCoord, yCoord, rot)
+		board_data[yCoord][xCoord] = EndPipe.create(xCoord, yCoord, rot, 100)
 		endPipes[i] = board_data[yCoord][xCoord]
 	end
 end
@@ -91,14 +91,16 @@ function boardClick( _x, _y, _button )
 		local y = math.floor((_y-DIM)/DIM)+1
 		if _button == "l" then
 			if Buffet.pending > 0 then
-				local pipeType = Buffet.pipes[Buffet.pending]
-				if pipeType == PIPE_CROSSLINE then
-					board_data[y][x] = CrossPipe.create(x,y,PIPE_LINE,1)
-				else
-					board_data[y][x] = Pipe.create(x,y,pipeType)
+				if board_data[y][x] == 0 or (board_data[y][x] ~= 0 and board_data[y][x]:getState() == STATE_EMPTY) then
+					local pipeType = Buffet.pipes[Buffet.pending]
+					if pipeType == PIPE_CROSSLINE then
+						board_data[y][x] = CrossPipe.create(x,y,PIPE_LINE,1)
+					else
+						board_data[y][x] = Pipe.create(x,y,pipeType,100)
+					end
+					board_data[y][x]:rotate(Buffet.rotations[Buffet.pending]-1)
+					Buffet.reset()
 				end
-				board_data[y][x]:rotate(Buffet.rotations[Buffet.pending]-1)
-				Buffet.reset()
 			end
 		end
 	end

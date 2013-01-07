@@ -6,7 +6,7 @@ Pipe.__index = Pipe
 
 -- creates a new instance of Pipe
 -- state is initialized to STATE_EMPTY, and rotation to 1
-function Pipe.create( _x, _y, _type )
+function Pipe.create( _x, _y, _type, _score )
 	local self = setmetatable({}, Pipe)
 
 	-- general pipe data
@@ -20,6 +20,7 @@ function Pipe.create( _x, _y, _type )
 	self.type = _type
 	self.enter = 0
 	self.activated = -1
+	self.score = _score
 
 	-- initialize neighbor points for given type of pipe
 	self.entries = {}
@@ -74,15 +75,22 @@ end
 
 function Pipe:exitAction( )
 	for n=1,self.noe do
-		test = true
+		local test = true
 		if self.exit[n] == 1 then
 			if self.entries[n]:checkBounds() then
 				if getBoardValue(self.entries[n]) ~= 0 then
 					if getBoardValue(self.entries[n]):probe(self.point, globalFrame) then
+						-- Add score label if pipe has score
+						if self.score > 0 then
+							local scoreX = self.x+DIM_HALF + (self.entries[n].x - self.point.x)*DIM_HALF
+							local scoreY = self.y+DIM_HALF + (self.entries[n].y - self.point.y)*DIM_HALF
+							Score.addLabel(scoreX, scoreY, self.score)
+						end
 						test = false
 					end
 				end
 				if test then
+					score = false
 					self:leak(n)
 				end
 			end
@@ -121,6 +129,10 @@ end
 
 function Pipe:getState()
 	return self.state
+end
+
+function Pipe:setScore(_score)
+	self.score = _score
 end
 
 -- rotates the Pipe instance

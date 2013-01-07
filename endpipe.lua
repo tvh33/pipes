@@ -6,13 +6,13 @@ EndPipe.__index = EndPipe
 
 -- creates a new instance of EndPipe
 -- container for two orthogonal LinePipe instances
-function EndPipe.create( _x, _y, _rot )
+function EndPipe.create( _x, _y, _rot, _score )
 	local self = setmetatable({}, EndPipe)
 
 	self.state = 0
 	self.x = _x*DIM
 	self.y = _y*DIM
-	self.line = Pipe.create(_x,_y,PIPE_END)
+	self.line = Pipe.create(_x,_y,PIPE_END,_score)
 	self.wheelAngle = 0
 
 	if _rot > 0 then
@@ -38,6 +38,9 @@ function EndPipe:probe( _p, _frame )
 	won = self.line:probe(_p, _frame)
 	if won then
 		print("YOU WON!!\n")
+		local scoreX = self.line.x + DIM_HALF
+		local scoreY = self.line.y + DIM_HALF
+		Score.addLabel(scoreX, scoreY, 250)
 	end
 	return won
 end
