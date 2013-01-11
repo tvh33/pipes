@@ -15,9 +15,11 @@ function love.load( )
 	math.randomseed( os.time() )
 	math.random(); math.random(); math.random()
 	love.graphics.setBackgroundColor(23,16,7)
+	ORIGIN = Point.create(0,0)
+	gameState = STATE_TIME_LEFT
 	init_board()
 	sfx = {}
-	Buffet.setPosition(DIM, (GRID_HEIGHT+1)*DIM+DIM_HALF)
+	Buffet.setPosition(XOFF, (GRID_HEIGHT)*DIM+YOFF+DIM_HALF)
 	Buffet.reset()
 	Score.init()
 end
@@ -48,6 +50,12 @@ function love.draw( )
 	Score.draw()
 end
 
+function clearLeaks( )
+	for	i,v in ipairs(sfx) do
+		table.remove(sfx,i)
+	end
+end
+
 function love.mousepressed( _x, _y, _button )
 	Buffet.mousePressed(_x,_y,_button)
 end
@@ -70,6 +78,11 @@ function love.keypressed( _key )
 		end
 	elseif _key == "r" then
 		reset_board()
+		clearLeaks()
 		Buffet.reset()
+	elseif _key == "w" then
+		if gameState == STATE_WATER_RUNNING then
+			WATER_SPEED = SPEED_FAST
+		end
 	end
 end

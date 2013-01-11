@@ -38,7 +38,7 @@ end
 
 -- Tests whether or not the point instance is in the board grid
 -- Returns true if inside grid, false otherwise
-function Point:checkBounds( )
+function Point:checkBounds()
 	if self.x <= 0 or self.x > GRID_WIDTH or self.y <= 0 or self.y > GRID_HEIGHT then
 		return false
 	end

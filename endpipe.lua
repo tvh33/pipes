@@ -34,10 +34,10 @@ function EndPipe:getState()
 	return self.line:getState()
 end
 
-function EndPipe:probe( _p, _frame )
+function EndPipe:probe(_p, _frame)
 	won = self.line:probe(_p, _frame)
 	if won then
-		print("YOU WON!!\n")
+		boardEndPipe()
 		local scoreX = self.line.x + DIM_HALF
 		local scoreY = self.line.y + DIM_HALF
 		Score.addLabel(scoreX, scoreY, 250)
@@ -47,7 +47,7 @@ end
 
 -- draws the EndPipe instance
 -- calls draw routine on both its LinePipe instances
-function EndPipe:draw( )
+function EndPipe:draw()
 	self.line:draw()
 end
 

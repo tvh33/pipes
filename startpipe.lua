@@ -10,16 +10,15 @@ function StartPipe.create( _x, _y, _rot, _score )
 	local self = setmetatable({}, StartPipe)
 
 	self.state = 0
-	self.x = _x*DIM
-	self.y = _y*DIM
+	self.x = (_x-1)*DIM+XOFF
+	self.y = (_y-1)*DIM+YOFF
 	self.line = Pipe.create(_x,_y,PIPE_START,_score)
 	self.wheelAngle = 0
 	self.wheelOffPoint = Point.create(0,(SCALE*4))
 
 	if _rot > 0 then
-		local center = Point.create(0,0)
 		self.line:rotate(_rot)
-		self.wheelOffPoint:rotate(center, _rot)
+		self.wheelOffPoint:rotate(ORIGIN, _rot)
 	end
 
 	return self
@@ -67,5 +66,5 @@ end
 -- calls update routine on both its LinePipe instances
 function StartPipe:rotate(_times)
 	self.line:rotate(_times)
-	self.wheelOffPoint:rotateCenter(_times)
+	self.wheelOffPoint:rotate(ORIGIN, _times)
 end

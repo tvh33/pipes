@@ -12,8 +12,8 @@ function Pipe.create( _x, _y, _type, _score )
 	-- general pipe data
 	self.state = STATE_EMPTY
 	self.point = Point.create(_x, _y)
-	self.x = _x*DIM
-	self.y = _y*DIM
+	self.x = (_x-1)*DIM+XOFF
+	self.y = (_y-1)*DIM+YOFF
 	self.rotation = 1
 	self.angle = 0
 	self.step = 1

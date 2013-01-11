@@ -3,12 +3,22 @@ local lg = love.graphics
 
 local timer = 0
 globalFrame = 0
-local clock = 0
+local timeSinceLastTick = 0
 stateting = 0
-local startPipes = {}
+
+-- time until water flows
+local time = 60
+timeRemaining = time
+
+-- number of end pipes
+local endNumber = 3
 local endPipes = {}
-local endNumber = 2
-local startNumber = 1
+local endPipesDone = 0
+
+-- number of start pipes
+local startNumber = 2
+local startPipes = {}
+
 -- two-dimensional array to store board data
 -- initialized with zero entries
 board_data = {}
@@ -19,11 +29,11 @@ for j=1,GRID_HEIGHT do
 	end
 end
 
-function init_board( )
+function init_board()
 	reset_board()
 end
 
-function reset_board( )
+function reset_board()
 	-- clear board grid
 	for j=1,GRID_HEIGHT do
 		for i=1,GRID_WIDTH do
@@ -31,50 +41,96 @@ function reset_board( )
 		end
 	end
 	-- Insert random start pipe(s)
-	for i=1,startNumber do
-		local rot = math.random(0,3)
-		local xCoord = math.random(2,GRID_WIDTH-1)
-		local yCoord = math.random(2,GRID_HEIGHT-1)
-		board_data[yCoord][xCoord] = StartPipe.create(xCoord, yCoord, rot, 0)
+	for i=1,startNumber+endNumber do
+		local xCoord = math.random(1, GRID_WIDTH)
+		local yCoord = math.random(1, GRID_HEIGHT)
+		while false == checkCoordinates(xCoord, yCoord) do
+			xCoord = math.random(1, GRID_WIDTH)
+			yCoord = math.random(1, GRID_HEIGHT)
+		end
+		local rot = math.random(0, 3)
+
+		if i > startNumber then
+			-- insert start pipe
+			board_data[yCoord][xCoord] = EndPipe.create(xCoord, yCoord, rot, 0)
+		else 
+			-- insert end pipe
+			board_data[yCoord][xCoord] = StartPipe.create(xCoord, yCoord, rot, 0)
+		end
+		correctRotation(board_data[yCoord][xCoord])
 		startPipes[i] = board_data[yCoord][xCoord]
 	end
-	-- Insert random end pipe(s)
-	for i=1,endNumber do
-		local rot = math.random(0,3)
-		local xCoord = math.random(2,GRID_WIDTH-1)
-		local yCoord = math.random(2,GRID_HEIGHT-1)
-		board_data[yCoord][xCoord] = EndPipe.create(xCoord, yCoord, rot, 100)
-		endPipes[i] = board_data[yCoord][xCoord]
+	-- set remaining time
+	timeRemaining = time+1
+	-- set start state
+	gameState = STATE_TIME_LEFT
+	-- set water speed
+	WATER_SPEED = 1.5
+end
+
+function checkCoordinates(_x, _y)
+	for j=-1,1 do
+		for i=-1,1 do
+			local point = Point.create(_x+i, _y+j)
+			if (j == 0 or i == 0) and point:checkBounds() then
+				if board_data[_y+j][_x+i] ~= 0 then
+					return false
+				end
+			end
+		end
+	end
+	return true
+end
+
+function correctRotation(_pipe)
+	for n=1,_pipe.line.noe do
+		while false == _pipe.line.entries[n]:checkBounds() do
+			_pipe:rotate(1)
+		end
 	end
 end
 
 -- updates the board
 -- iterates through board matrix and calls update routine on
 -- individual pipe instances
-function update_board( dt )
-	for i=1,startNumber do
-		startPipes[i]:updateReal(dt)
-	end
-	if stateting > 0 then
-		clock = clock + WATER_SPEED*dt
-		if clock >= 1 then
+function update_board(_dt)
+
+	if gameState == STATE_WATER_RUNNING then
+		-- update wheel animations (may be finished)
+		for i=1,startNumber do
+			startPipes[i]:updateReal(_dt)
+		end
+		-- record delta time
+		timeSinceLastTick = timeSinceLastTick+WATER_SPEED*_dt
+		-- check if time to tick pipes
+		if timeSinceLastTick >= 1 then
+			-- increment global tick count
 			globalFrame = globalFrame + 1
-			--print("Global clock = "..globalFrame)
 			for j=1,GRID_HEIGHT do
 				for i=1,GRID_WIDTH do
 					if board_data[j][i] ~= 0 then
 						board_data[j][i]:update(globalFrame)
-						
 					end
 				end
 			end
-			clock = 0
+			timeSinceLastTick = 0
+		end
+	elseif gameState == STATE_TIME_LEFT then
+		timeRemaining = timeRemaining - _dt
+		if timeRemaining <= 0 then
+			timeRemaining = 0
+			startBoard()
 		end
 	end
 end
 
-function startBoard( )
-	stateting = 1
+function boardEndPipe()
+	endPipesDone = endPipesDone + 1
+	--print("End pipes done = "..endPipesDone)
+end
+
+function startBoard()
+	gameState = STATE_WATER_RUNNING
 	for i=1,startNumber do
 		startPipes[i]:enterAction()
 	end
@@ -84,11 +140,11 @@ function getBoardValue(_p)
 	return board_data[_p.y][_p.x]
 end
 
-function boardClick( _x, _y, _button )
-	if _x > DIM and _x < DIM+GRID_WIDTH*DIM and _y > DIM and _y < DIM+GRID_HEIGHT*DIM then
+function boardClick(_x, _y, _button)
+	if _x > XOFF and _x < XOFF+GRID_WIDTH*DIM and _y > YOFF and _y < YOFF+GRID_HEIGHT*DIM then
 		-- quantize points
-		local x = math.floor((_x-DIM)/DIM)+1
-		local y = math.floor((_y-DIM)/DIM)+1
+		local x = math.floor((_x-XOFF)/DIM)+1
+		local y = math.floor((_y-YOFF)/DIM)+1
 		if _button == "l" then
 			if Buffet.pending > 0 then
 				if board_data[y][x] == 0 or (board_data[y][x] ~= 0 and board_data[y][x]:getState() == STATE_EMPTY) then
@@ -119,10 +175,10 @@ function draw_board()
 	end
 end
 
-function drawBoardBase( )
-	for j=1,GRID_HEIGHT do
-		for i=1,GRID_WIDTH do
-			lg.drawq(pipe_sprites, tileQuad, i*DIM, j*DIM, 0, SCALE, SCALE, 0, 0)
+function drawBoardBase()
+	for j=0,GRID_HEIGHT-1 do
+		for i=0,GRID_WIDTH-1 do
+			lg.drawq(pipe_sprites, tileQuad, i*DIM+XOFF, j*DIM+YOFF, 0, SCALE, SCALE, 0, 0)
 		end
 	end
 end

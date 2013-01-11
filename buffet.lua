@@ -15,22 +15,40 @@ Buffet = {
 	states = {},
 	pipeX = {}
 }
+-- slot types
+local slotType = {}
+for i=1,SLOT_COUNT do
+	slotType[i] = i
+end
 
 local pendingXoff = 0
 local pendingYoff = 0
 
-function Buffet.reset( )
+function Buffet.reset()
+	-- shuffle slot types
+	local n = SLOT_COUNT
+	while n > 1 do
+		local k = math.random(1,n)
+		-- swap
+		local swapper = slotType[n]
+		slotType[n] = slotType[k]
+		slotType[k] = swapper
+
+		n = n - 1
+	end
+
 	for i=1,SLOT_COUNT do
 		Buffet.new(i)
 	end
 	Buffet.pending = 0
 end
 
-function Buffet.new( _index )
-	local pipe = PIPE_CROSSLINE
+function Buffet.new(_index)
 	local rot = math.random(1,4)
-	if math.random() > 0.10 then
-		pipe = math.random(1,3)
+	local pipe = slotType[_index]
+	if slotType[_index] > 3 then
+		pipe = math.random(1,4)
+		if pipe == 4 then pipe = 6 end
 	end
 
 	-- update pipe information for this slot
@@ -39,7 +57,7 @@ function Buffet.new( _index )
 	Buffet.states[_index] = AVAILABLE
 end
 
-function Buffet.setPosition( _x, _y )
+function Buffet.setPosition(_x, _y)
 	Buffet.x = _x
 	Buffet.y = _y
 	for i=1,SLOT_COUNT do
