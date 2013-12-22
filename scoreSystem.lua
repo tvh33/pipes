@@ -65,8 +65,8 @@ function Score.draw()
 		end
 	end
 	love.graphics.setColor(255,255,255,255)
-	love.graphics.print("Score", 450, Score.y)
+	love.graphics.print("SCORE", 450, Score.y)
 	love.graphics.print(Score.score, 450, Score.y+15)
-	love.graphics.print("Time left", 550, Score.y)
+	love.graphics.print("TIME LEFT", 550, Score.y)
 	love.graphics.print(math.floor(timeRemaining), 550, Score.y+15)
 end

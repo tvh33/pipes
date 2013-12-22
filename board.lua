@@ -29,6 +29,9 @@ for j=1,GRID_HEIGHT do
 	end
 end
 
+local current_x = 1
+local current_y = 1
+
 function init_board()
 	reset_board()
 end
@@ -171,6 +174,10 @@ function draw_board()
 			if board_data[j][i] ~= 0 then
 				board_data[j][i]:draw()
 			end
+			if current_y == j and current_x == i then
+				lg.rectangle("line", (i-1)*DIM+XOFF, (j-1)*DIM+YOFF, DIM, DIM)
+				buffetDrawTmp(i,j)
+			end
 		end
 	end
 end
@@ -181,4 +188,27 @@ function drawBoardBase()
 			lg.drawq(pipe_sprites, tileQuad, i*DIM+XOFF, j*DIM+YOFF, 0, SCALE, SCALE, 0, 0)
 		end
 	end
+end
+
+function boardKey(_key)
+	if _key == "down" then
+		current_y = current_y%GRID_HEIGHT + 1
+	elseif _key == "up" then
+		current_y = current_y%GRID_HEIGHT - 1
+	elseif _key == "left" then
+		current_x = current_x%GRID_WIDTH - 1
+	elseif _key == "right" then
+		current_x = current_x%GRID_WIDTH + 1
+	end
+end
+
+function boardLock()
+	local pipeType, rot = buffetLock()
+	if pipeType == PIPE_CROSSLINE then
+		board_data[current_y][current_x] = CrossPipe.create(current_x,current_y,PIPE_LINE,1)
+	else
+		board_data[current_y][current_x] = Pipe.create(current_x,current_y,pipeType,100)
+	end
+	board_data[current_y][current_x]:rotate(rot-1)
+	Buffet.reset()
 end

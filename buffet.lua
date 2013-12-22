@@ -24,6 +24,8 @@ end
 local pendingXoff = 0
 local pendingYoff = 0
 
+currentBuffet = 1
+
 function Buffet.reset()
 	-- shuffle slot types
 	local n = SLOT_COUNT
@@ -86,11 +88,14 @@ end
 
 function Buffet.draw( )
 	for i=1,SLOT_COUNT do
-		love.graphics.rectangle("line", Buffet.pipeX[i], Buffet.y, DIM, DIM)
+		--love.graphics.rectangle("line", Buffet.pipeX[i], Buffet.y, DIM, DIM)
 		if Buffet.states[i] == AVAILABLE then
 			local pipeType = Buffet.pipes[i]
 			local pipeRotation = Buffet.rotations[i]
 			love.graphics.drawq(pipe_sprites, pipe_quads[pipeType][pipeRotation], Buffet.pipeX[i], Buffet.y, 0, SCALE, SCALE, 0, 0)
+		end
+		if currentBuffet == i then
+			love.graphics.rectangle("line", Buffet.pipeX[i], Buffet.y, DIM, DIM)
 		end
 	end
 	if Buffet.pending > 0 then
@@ -98,4 +103,18 @@ function Buffet.draw( )
 		local pipeRotation = Buffet.rotations[Buffet.pending]
 		love.graphics.drawq(pipe_sprites, pipe_quads[pipeType][pipeRotation], love.mouse.getX()-pendingXoff, love.mouse.getY()-pendingYoff, 0, SCALE, SCALE, 0, 0)
 	end
+end
+
+function buffetShift()
+	currentBuffet = currentBuffet%5+1
+end
+
+function buffetDrawTmp(_x, _y)
+	local pipeType = Buffet.pipes[currentBuffet]
+	local pipeRotation = Buffet.rotations[currentBuffet]
+	love.graphics.drawq(pipe_sprites, pipe_quads[pipeType][pipeRotation], (_x-1)*DIM+XOFF, (_y-1)*DIM+YOFF, 0, SCALE, SCALE, 0, 0)
+end
+
+function buffetLock()
+	return Buffet.pipes[currentBuffet], Buffet.rotations[currentBuffet]
 end

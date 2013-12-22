@@ -1,4 +1,4 @@
-pipe_sprites = love.graphics.newImage("res/sprites.png")
+pipe_sprites = love.graphics.newImage("res/pipes_steampunk.png")
 pipe_sprites:setFilter("nearest", "nearest")
 
 -- pipe sprites
@@ -12,6 +12,9 @@ end
 
 -- tile sprite
 tileQuad = love.graphics.newQuad(0, 6*BASE_DIM, BASE_DIM, BASE_DIM, 512, 512)
+
+-- menu arrow
+q_arrow = love.graphics.newQuad(BASE_DIM, 6*BASE_DIM, 4, 6, 512, 512)
 
 -- wheel animation sprites
 wheelQuads = {}
@@ -38,3 +41,8 @@ for n=1,5 do
 		end
 	end
 end
+
+q_main_menu_bg = love.graphics.newQuad(512-255, 512-216, 255, 216, 512, 512)
+img_boldfont = love.graphics.newImage("res/boldfont.png")
+img_boldfont:setFilter("nearest", "nearest")
+fontBold = love.graphics.newImageFont(img_boldfont, " ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!'-:*@<>")
